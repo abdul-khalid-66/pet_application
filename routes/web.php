@@ -24,6 +24,13 @@ Route::resource('orders', OrderController::class)->middleware(['auth', 'verified
 Route::resource('users', UserController::class)->middleware(['auth', 'verified']);
 
 
+Route::get('admin/users', [UserController::class, 'admins'])->name('admin.users.index')->middleware(['auth', 'verified']);
+Route::get('buyer/users', [UserController::class, 'buyers'])->name('buyer.users.index')->middleware(['auth', 'verified']);
+Route::get('seller/users', [UserController::class, 'sellers'])->name('seller.users.index')->middleware(['auth', 'verified']);
+
+
+
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

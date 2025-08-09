@@ -2,14 +2,13 @@
  @push('css')
 
 @endpush
-    <x-slot name="title">Users Management</x-slot>
+    <x-slot name="title">All Users</x-slot>
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Users List</h3>
-                        <div class="card-tools">
+                        <div class="card-title">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
                                     Filter by Role
@@ -22,7 +21,14 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card-tools">
+                            <a href="{{ route('animals.create') }}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus"></i> Add New User
+                            </a>
+                        </div>
                     </div>
+
+
                     <!-- /.card-header -->
                     <div class="card-body">
                         <table id="usersTable" class="table table-bordered table-striped table-hover">

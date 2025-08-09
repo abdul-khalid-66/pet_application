@@ -220,19 +220,19 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="{{ route('seller.users.index') }}" class="nav-link">
                     <i class="nav-icon bi bi-person-badge"></i>
                     <p>Sellers</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="{{ route('buyer.users.index') }}" class="nav-link">
                     <i class="nav-icon bi bi-person-check"></i>
                     <p>Buyers</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="{{ route('admin.users.index') }}" class="nav-link">
                     <i class="nav-icon bi bi-shield-lock"></i>
                     <p>Admins</p>
                   </a>
@@ -332,7 +332,10 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-sm-6">
-              <h3 class="mb-0">Dashboard</h3>
+              
+              @isset($title)
+                <h3 class="mb-0">{{ $title }}</h3>
+              @endisset
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-end">
