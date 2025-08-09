@@ -13,7 +13,9 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.orders.index', [
+            'orders' => Order::latest()->get(),
+        ]);
     }
 
     /**

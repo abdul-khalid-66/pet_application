@@ -183,7 +183,7 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="{{ route('orders.index') }}" class="nav-link">
                     <i class="nav-icon bi bi-cart-check"></i>
                     <p>Orders</p>
                   </a>

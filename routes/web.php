@@ -5,6 +5,10 @@ use App\Http\Controllers\Admin\{
     DashboardController,
     CategoryController,
 };
+use App\Http\Controllers\Seller\{
+    OrderController
+};
+
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +19,7 @@ Route::get('/', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::resource('animals', AnimalController::class)->middleware(['auth', 'verified']);
 Route::resource('categories', CategoryController::class)->middleware(['auth', 'verified']);
+Route::resource('orders', OrderController::class)->middleware(['auth', 'verified']);
 
 
 Route::middleware('auth')->group(function () {
