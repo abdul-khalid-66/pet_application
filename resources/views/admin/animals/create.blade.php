@@ -346,46 +346,47 @@
 
 
     @push('js')
-    <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
-    <script src="{{ asset('plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
-    <script>
-        $(function () {
-            // Initialize Select2 Elements
-            $('.select2').select2();
+        <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
+        <script src="{{ asset('plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
+        <script>
 
-            // Initialize bsCustomFileInput
-            bsCustomFileInput.init();
+            $(function () {
+                // Initialize Select2 Elements
+                $('.select2').select2();
 
-            // Calculate age based on date of birth
-            $('#date_of_birth').change(function() {
-                if ($(this).val()) {
-                    const dob = new Date($(this).val());
-                    const today = new Date();
-                    let age = today.getFullYear() - dob.getFullYear();
-                    const m = today.getMonth() - dob.getMonth();
-                    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
-                        age--;
-                    }
-                    $('#age').val(age * 12); // Convert years to months
-                }
-            });
-        });
+                // Initialize bsCustomFileInput
+                bsCustomFileInput.init();
 
-        function removeImage(imageId, element) {
-            if (confirm('Are you sure you want to remove this image?')) {
-                $.ajax({
-                    url: '/admin/animal-images/' + imageId,
-                    type: 'DELETE',
-                    data: {
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            $(element).parent().remove();
+                // Calculate age based on date of birth
+                $('#date_of_birth').change(function() {
+                    if ($(this).val()) {
+                        const dob = new Date($(this).val());
+                        const today = new Date();
+                        let age = today.getFullYear() - dob.getFullYear();
+                        const m = today.getMonth() - dob.getMonth();
+                        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+                            age--;
                         }
+                        $('#age').val(age * 12); // Convert years to months
                     }
                 });
+            });
+            function removeImage(imageId, element) {
+                if (confirm('Are you sure you want to remove this image?')) {
+                    $.ajax({
+                        url: '/admin/animal-images/' + imageId,
+                        type: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                $(element).parent().remove();
+                            }
+                        }
+                    });
+                }
             }
-        }
-    </script>
+        </script>
+    @endpush
 </x-app-layout>

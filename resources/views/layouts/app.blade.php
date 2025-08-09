@@ -137,7 +137,7 @@
 
             <!-- Animals Management -->
             <li class="nav-item">
-              <a href="{{ route('animals.index') }}" class="nav-link {{ request()->routeIs('animals.index') ? 'active' : '' }}">
+              <a href="#"  class="nav-link">
                 <i class="nav-icon bi bi-egg-fill"></i>
                 <p>
                   Animals
@@ -145,14 +145,14 @@
                 </p>
               </a>
               <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
+                <li class="nav-item {{ request()->routeIs('animals.index') ? 'active' : '' }}">
+                  <a href="{{ route('animals.index') }}"class="nav-link">
                     <i class="nav-icon bi bi-list"></i>
                     <p>All Animals</p>
                   </a>
                 </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
+                <li class="nav-item {{ request()->routeIs('animals.create') ? 'active' : '' }}">
+                  <a href="{{ route('animals.create') }}" class="nav-link">
                     <i class="nav-icon bi bi-plus-circle"></i>
                     <p>Add New Animal</p>
                   </a>
