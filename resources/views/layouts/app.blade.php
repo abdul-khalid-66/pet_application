@@ -214,6 +214,12 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
+                  <a href="{{ route('users.index') }}" class="nav-link">
+                    <i class="nav-icon bi bi-people"></i>
+                    <p>All Users</p>
+                  </a>
+                </li>
+                <li class="nav-item">
                   <a href="#" class="nav-link">
                     <i class="nav-icon bi bi-person-badge"></i>
                     <p>Sellers</p>
@@ -340,9 +346,9 @@
 
       <!-- Main Content -->
       <div class="app-content">
-        <div class="container-fluid">
+        {{-- <div class="container-fluid"> --}}
           {{ $slot }}
-        </div>
+        {{-- </div> --}}
       </div>
     </main>
 

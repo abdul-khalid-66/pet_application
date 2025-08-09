@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\{
     AnimalController,
     DashboardController,
     CategoryController,
+    UserController,
 };
 use App\Http\Controllers\Seller\{
     OrderController
@@ -20,6 +21,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['au
 Route::resource('animals', AnimalController::class)->middleware(['auth', 'verified']);
 Route::resource('categories', CategoryController::class)->middleware(['auth', 'verified']);
 Route::resource('orders', OrderController::class)->middleware(['auth', 'verified']);
+Route::resource('users', UserController::class)->middleware(['auth', 'verified']);
 
 
 Route::middleware('auth')->group(function () {

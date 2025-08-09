@@ -13,7 +13,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.users.index', [
+            'users' => User::whereNot('id', auth()->user()->id)->latest()->get(),
+        ]);
     }
 
     /**
