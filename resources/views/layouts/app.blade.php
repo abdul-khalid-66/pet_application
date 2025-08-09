@@ -103,6 +103,8 @@
       color: rgba(255, 255, 255, 0.8);
     }
   </style>
+
+  @stack('styles')
 </head>
 
 <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
@@ -135,7 +137,7 @@
 
             <!-- Animals Management -->
             <li class="nav-item">
-              <a href="#" class="nav-link">
+              <a href="{{ route('animals.index') }}" class="nav-link {{ request()->routeIs('animals.index') ? 'active' : '' }}">
                 <i class="nav-icon bi bi-egg-fill"></i>
                 <p>
                   Animals
@@ -347,7 +349,7 @@
     <!-- Footer -->
     <footer class="app-footer">
       <div class="float-end d-none d-sm-inline">Pet Market Admin</div>
-      <strong>Copyright &copy; 2023-{{ date('Y') }} <a href="#" class="text-decoration-none">Pet Market</a>.</strong> All rights
+      <strong>Copyright &copy; 2025-{{ date('Y') }} <a href="#" class="text-decoration-none">Pet Market</a>.</strong> All rights
       reserved.
     </footer>
   </div>
@@ -400,7 +402,7 @@
         },
         body: JSON.stringify({theme: newTheme})
       });
-
+      
       if (newTheme === 'dark') {
         lightIcon.classList.add('d-none');
         darkIcon.classList.remove('d-none');
@@ -425,5 +427,8 @@
       }
     });
   </script>
+
+  @stack('scripts')
+  
 </body>
 </html>
