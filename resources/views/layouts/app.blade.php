@@ -53,16 +53,11 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <!-- Fonts -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
-    integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q=" crossorigin="anonymous" media="print"
-    onload="this.media='all'" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"/>
 
   <!-- Third Party Plugins -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
-    crossorigin="anonymous" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
-    crossorigin="anonymous" />
-
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
   <!-- Main CSS -->
   {{-- @vite(['resources/css/app.css', 'resources/css/adminlte.css']) --}}
     <link rel="stylesheet" href="{{ asset('admin/assets/css/adminlte.css') }}" />
@@ -111,219 +106,8 @@
   <div class="app-wrapper">
     <!-- Header/Navbar -->
     @include('layouts.navigation')
-
     <!-- Sidebar -->
-    <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
-      <!-- Sidebar Brand -->
-      <div class="sidebar-brand">
-        <a href="{{ route('dashboard') }}" class="brand-link">
-          <img src="{{ asset('admin/assets/assets/img/avatar.png') }}" alt="Pet Market Logo" class="brand-image opacity-75 shadow" />
-          <span class="brand-text fw-light">Pet Market</span>
-        </a>
-      </div>
-
-      <!-- Sidebar Menu -->
-      <div class="sidebar-wrapper">
-        <nav class="mt-2">
-          <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation"
-            aria-label="Main navigation" data-accordion="false" id="navigation">
-            <!-- Dashboard -->
-            <li class="nav-item">
-              <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                <i class="nav-icon bi bi-speedometer"></i>
-                <p>Dashboard</p>
-              </a>
-            </li>
-
-            <!-- Animals Management -->
-            <li class="nav-item">
-              <a href="#"  class="nav-link">
-                <i class="nav-icon bi bi-egg-fill"></i>
-                <p>
-                  Animals
-                  <i class="nav-arrow bi bi-chevron-right"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item {{ request()->routeIs('animals.index') ? 'active' : '' }}">
-                  <a href="{{ route('animals.index') }}"class="nav-link">
-                    <i class="nav-icon bi bi-list"></i>
-                    <p>All Animals</p>
-                  </a>
-                </li>
-                <li class="nav-item {{ request()->routeIs('animals.create') ? 'active' : '' }}">
-                  <a href="{{ route('animals.create') }}" class="nav-link">
-                    <i class="nav-icon bi bi-plus-circle"></i>
-                    <p>Add New Animal</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{ route('categories.index') }}" class="nav-link">
-                    <i class="nav-icon bi bi-tags"></i>
-                    <p>Categories</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="nav-icon bi bi-collection"></i>
-                    <p>Group Sales</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-
-            <!-- Sales Management -->
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="nav-icon bi bi-cash-stack"></i>
-                <p>
-                  Sales
-                  <i class="nav-arrow bi bi-chevron-right"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="{{ route('orders.index') }}" class="nav-link">
-                    <i class="nav-icon bi bi-cart-check"></i>
-                    <p>Orders</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="nav-icon bi bi-gem"></i>
-                    <p>Auctions</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="nav-icon bi bi-graph-up"></i>
-                    <p>Sales Reports</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-
-            <!-- User Management -->
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="nav-icon bi bi-people-fill"></i>
-                <p>
-                  Users
-                  <i class="nav-arrow bi bi-chevron-right"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="{{ route('users.index') }}" class="nav-link">
-                    <i class="nav-icon bi bi-people"></i>
-                    <p>All Users</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{ route('seller.users.index') }}" class="nav-link">
-                    <i class="nav-icon bi bi-person-badge"></i>
-                    <p>Sellers</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{ route('buyer.users.index') }}" class="nav-link">
-                    <i class="nav-icon bi bi-person-check"></i>
-                    <p>Buyers</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{ route('admin.users.index') }}" class="nav-link">
-                    <i class="nav-icon bi bi-shield-lock"></i>
-                    <p>Admins</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-
-            <!-- Communication -->
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="nav-icon bi bi-chat-left-text"></i>
-                <p>
-                  Communication
-                  <i class="nav-arrow bi bi-chevron-right"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="nav-icon bi bi-chat-dots"></i>
-                    <p>Messages</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="nav-icon bi bi-star-fill"></i>
-                    <p>Reviews</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-
-            <!-- Reports -->
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="nav-icon bi bi-flag"></i>
-                <p>
-                  Reports
-                  <i class="nav-arrow bi bi-chevron-right"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="nav-icon bi bi-exclamation-triangle"></i>
-                    <p>Issue Reports</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="nav-icon bi bi-activity"></i>
-                    <p>Analytics</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-
-            <!-- Settings -->
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="nav-icon bi bi-gear-fill"></i>
-                <p>
-                  Settings
-                  <i class="nav-arrow bi bi-chevron-right"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="nav-icon bi bi-sliders"></i>
-                    <p>General Settings</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="nav-icon bi bi-credit-card"></i>
-                    <p>Payment Methods</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="nav-icon bi bi-palette"></i>
-                    <p>Templates</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </aside>
+    @include('layouts.sidebar')
 
     <!-- Main Content Area -->
     <main class="app-main">
@@ -332,7 +116,6 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-sm-6">
-              
               @isset($title)
                 <h3 class="mb-0">{{ $title }}</h3>
               @endisset
@@ -349,6 +132,20 @@
 
       <!-- Main Content -->
       <div class="app-content">
+            <div class="card mb-4">
+              <div class="card-header">
+                  <div class="card-title">
+                    @isset($page_title)
+                      <h3 class="mb-0">{{ $page_title }}</h3>
+                    @endisset
+                  </div>
+                  <div class="card-tools">
+                      @isset($page_button)
+                        <h3 class="mb-0">{{ $page_button }}</h3>
+                      @endisset
+                  </div>
+              </div>
+          </div>
         {{-- <div class="container-fluid"> --}}
           {{ $slot }}
         {{-- </div> --}}
@@ -364,12 +161,10 @@
   </div>
 
   <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
-  {{-- @vite(['resources/js/app.js', 'resources/js/adminlte.js']) --}}
+  <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+  <script src="https://cdn.datatables.net/2.0.3/js/dataTables.bootstrap5.js"></script>
   <script src="{{ asset('admin/assets/js/adminlte.js') }}" defer></script>
 
   <script>
