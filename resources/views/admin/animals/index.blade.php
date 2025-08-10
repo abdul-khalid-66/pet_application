@@ -15,7 +15,7 @@
     <div class="card">
         <!-- /.card-header -->
         <div class="card-body">
-            <table id="animalsTable" class="table table-bordered table-striped table-hover">
+            <table id="animalsTable" class="jquery_datatable_class table table-bordered table-striped table-hover">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -88,23 +88,6 @@
         <!-- /.card-body -->
     </div>
     @push('scripts')
-    <script>
-        $(function () {
-            $('#animalsTable').DataTable({
-                "paging": true,
-                "lengthChange": true,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-                "order": [[0, 'desc']],
-                "columnDefs": [
-                    { "orderable": false, "targets": [1, 8] },
-                    { "searchable": false, "targets": [1, 8] }
-                ]
-            });
-        });
-    </script>
+  
     @endpush
 </x-app-layout>

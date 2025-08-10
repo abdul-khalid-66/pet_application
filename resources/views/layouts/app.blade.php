@@ -230,6 +230,32 @@
         lightIcon.classList.remove('d-none');
       }
     });
+    
+  </script>
+  <script>
+      $(function () {
+          $('.jquery_datatable_class').DataTable({
+              "paging": true,
+              "lengthChange": true,
+              "searching": true,
+              "ordering": true,
+              "info": true,
+              "autoWidth": false,
+              "responsive": true,
+              "order": [[0, 'desc']],
+              "columnDefs": [
+                  { "orderable": false, "targets": [1, 6] },
+                  { "searchable": false, "targets": [1, 6] }
+              ],
+              language: {
+                  lengthMenu: "_MENU_", // Removes "Show entries" text
+                  search: ""            // Removes "Search:" label
+              },
+              initComplete: function () {
+                  $('.dataTables_filter input').attr('placeholder', 'Search...');
+              }
+          });
+      });
   </script>
 
   @stack('scripts')
