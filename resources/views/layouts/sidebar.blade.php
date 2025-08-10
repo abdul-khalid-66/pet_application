@@ -61,7 +61,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('group-sales.index') }}" class="nav-link">
                                 <i class="nav-icon bi bi-collection"></i>
                                 <p>Group Sales</p>
                             </a>

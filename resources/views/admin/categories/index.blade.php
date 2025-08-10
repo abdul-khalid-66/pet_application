@@ -44,11 +44,11 @@
                             <div class="btn-group btn-group-sm" role="group" aria-label="User actions">
 
                                 {{-- View --}}
-                                <a href="{{ route('categories.show', $category->id) }}" class="btn btn-info"
+                                {{-- <a href="{{ route('categories.show', $category->id) }}" class="btn btn-info"
                                     data-toggle="tooltip" data-bs-toggle="tooltip" data-placement="top"
                                     data-bs-placement="top" title="View">
                                     <i class="bi bi-eye"></i>
-                                </a>
+                                </a> --}}
 
                                 {{-- Edit --}}
                                 <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning"

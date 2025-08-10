@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\{
     DashboardController,
     CategoryController,
     UserController,
+    GroupSaleController
 };
 use App\Http\Controllers\Seller\{
     OrderController
@@ -22,6 +23,7 @@ Route::resource('animals', AnimalController::class)->middleware(['auth', 'verifi
 Route::resource('categories', CategoryController::class)->middleware(['auth', 'verified']);
 Route::resource('orders', OrderController::class)->middleware(['auth', 'verified']);
 Route::resource('users', UserController::class)->middleware(['auth', 'verified']);
+Route::resource('group-sales', GroupSaleController::class)->middleware(['auth', 'verified']);
 
 
 Route::get('admin/users', [UserController::class, 'admins'])->name('admin.users.index')->middleware(['auth', 'verified']);

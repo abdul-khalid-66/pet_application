@@ -100,7 +100,7 @@ class AnimalController extends Controller
             }
         }
 
-        return redirect()->route('admin.animals.index')
+        return redirect()->route('animals.index')
             ->with('success', 'Animal created successfully.');
     }
 
@@ -189,7 +189,7 @@ class AnimalController extends Controller
             }
         }
 
-        return redirect()->route('admin.animals.index')
+        return redirect()->route('animals.index')
             ->with('success', 'Animal updated successfully.');
     }
 
@@ -206,7 +206,7 @@ class AnimalController extends Controller
 
         $animal->delete();
 
-        return redirect()->route('admin.animals.index')
+        return redirect()->route('animals.index')
             ->with('success', 'Animal deleted successfully.');
     }
 

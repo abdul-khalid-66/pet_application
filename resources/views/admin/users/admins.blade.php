@@ -12,7 +12,7 @@
 
     <x-slot name="page_title">All Admins</x-slot>
     <x-slot name="page_button">
-        <a href="{{ route('animals.create') }}" class="btn btn-primary btn-sm">
+         <a href="{{ route('users.create') }}" class="btn btn-primary btn-sm">
             <i class="fas fa-plus"></i> Add New User
         </a>
     </x-slot>
