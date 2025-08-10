@@ -112,7 +112,7 @@
     <!-- Main Content Area -->
     <main class="app-main">
       <!-- Content Header -->
-      <div class="app-content-header">
+      {{-- <div class="app-content-header">
         <div class="container-fluid">
           <div class="row">
             <div class="col-sm-6">
@@ -128,11 +128,11 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> --}}
 
       <!-- Main Content -->
       <div class="app-content">
-            <div class="card mb-4">
+            <div class="card my-2">
               <div class="card-header">
                   <div class="card-title">
                     @isset($page_title)
