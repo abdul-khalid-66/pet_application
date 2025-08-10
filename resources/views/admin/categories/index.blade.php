@@ -1,13 +1,6 @@
 <x-app-layout>
     @push('css')
-            {{-- <style>
-            .category-img {
-                width: 60px;
-                height: 60px;
-                object-fit: cover;
-                border-radius: 5px;
-            }
-        </style> --}}
+
     @endpush
 
     <x-slot name="page_title">Animal Categories</x-slot>
@@ -37,7 +30,7 @@
                         <td>{{ $category->id }}</td>
                         <td>
                             @if($category->image)
-                            <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}"
+                            <img style="width: 80px;height: 50px" src="{{ asset('backend/' . $category->image) }}" alt="{{ $category->name }}"
                                 class="category-img">
                             @else
                             <span class="text-muted">No image</span>
@@ -47,21 +40,37 @@
                         <td>{{ $category->slug }}</td>
                         <td>{{ $category->animals_count }}</td>
                         <td>{{ $category->created_at->format('d M Y') }}</td>
-                        <td>
-                            <div class="btn-group">
-                                <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-primary btn-sm"
-                                    title="Edit">
-                                    <i class="fas fa-edit"></i>
+                        <td class="text-center">
+                            <div class="btn-group btn-group-sm" role="group" aria-label="User actions">
+
+                                {{-- View --}}
+                                <a href="{{ route('categories.show', $category->id) }}" class="btn btn-info"
+                                    data-toggle="tooltip" data-bs-toggle="tooltip" data-placement="top"
+                                    data-bs-placement="top" title="View">
+                                    <i class="bi bi-eye"></i>
                                 </a>
+
+                                {{-- Edit --}}
+                                <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning"
+                                    data-toggle="tooltip" data-bs-toggle="tooltip" data-placement="top"
+                                    data-bs-placement="top" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+
+                                {{-- Delete --}}
+                                @if($category->id != Auth::id())
                                 <form action="{{ route('categories.destroy', $category->id) }}" method="POST"
-                                    style="display: inline-block;">
+                                    onsubmit="return confirm('Are you sure you want to delete this user?')"
+                                    style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" title="Delete"
-                                        onclick="return confirm('Are you sure you want to delete this category?')">
-                                        <i class="fas fa-trash"></i>
+                                    <button type="submit" class="btn btn-danger" data-toggle="tooltip"
+                                        data-bs-toggle="tooltip" data-placement="top" data-bs-placement="top"
+                                        title="Delete">
+                                        <i class="bi bi-trash"></i>
                                     </button>
                                 </form>
+                                @endif
                             </div>
                         </td>
                     </tr>

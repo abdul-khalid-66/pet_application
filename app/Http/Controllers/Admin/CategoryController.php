@@ -5,17 +5,15 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AnimalCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        return view('admin.categories.index', [
-            'categories' => AnimalCategory::latest()->get(),
-        ]);
+        $categories = AnimalCategory::latest()->get();
+        return view('admin.categories.index', compact('categories'));
     }
 
     /**
@@ -23,7 +21,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.categories.create');
     }
 
     /**
@@ -31,38 +29,81 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:animal_categories',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = Storage::disk('website')->putFile('category_images', $request->file('image'));
+        }
+
+
+        $validated['slug'] = Str::slug($validated['name']);
+
+        AnimalCategory::create($validated);
+
+        return redirect()->route('categories.index')
+            ->with('success', 'Category created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(AnimalCategory $animalCategory)
+    public function show(AnimalCategory $category)
     {
-        //
+        return view('admin.categories.show', compact('category'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(AnimalCategory $animalCategory)
+    public function edit(AnimalCategory $category)
     {
-        //
+        return view('admin.categories.edit', compact('category'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, AnimalCategory $animalCategory)
+    public function update(Request $request, AnimalCategory $category)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:animal_categories,name,' . $category->id,
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        if ($request->hasFile('image')) {
+            if (!empty($category->image) && Storage::disk('website')->exists($category->image)) {
+                Storage::disk('website')->delete($category->image);
+            }
+            $validated['image'] = Storage::disk('website')->putFile('category_images', $request->file('image'));
+        }
+
+
+        $validated['slug'] = Str::slug($validated['name']);
+
+        $category->update($validated);
+
+        return redirect()->route('categories.index')
+            ->with('success', 'Category updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(AnimalCategory $animalCategory)
+    public function destroy(AnimalCategory $category)
     {
-        //
+        if ($category->image) {
+            Storage::disk('public')->delete($category->image);
+        }
+
+        $category->delete();
+
+        return redirect()->route('categories.index')
+            ->with('success', 'Category deleted successfully.');
     }
 }
