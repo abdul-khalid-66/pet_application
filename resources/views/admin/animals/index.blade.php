@@ -36,7 +36,7 @@
                         <td>
                             @if($animal->images->count() > 0)
                             <img src="{{ asset('storage/' . $animal->images->first()->image_path) }}"
-                                alt="{{ $animal->name }}" class="animal-img">
+                                alt="{{ $animal->name }}" style="height: 50px; width: 80px" class="animal-img">
                             @else
                             <span class="text-muted">No image</span>
                             @endif
@@ -63,19 +63,19 @@
                             <div class="btn-group">
                                 <a href="{{ route('animals.show', $animal->id) }}" class="btn btn-info btn-sm"
                                     title="View">
-                                    <i class="fas fa-eye"></i>
+                                    <i class="bi bi-eye"></i>
                                 </a>
                                 <a href="{{ route('animals.edit', $animal->id) }}" class="btn btn-primary btn-sm"
                                     title="Edit">
-                                    <i class="fas fa-edit"></i>
+                                    <i class="bi bi-pencil"></i>
                                 </a>
                                 <form action="{{ route('animals.destroy', $animal->id) }}" method="POST"
                                     style="display: inline-block;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" title="Delete"
+                                    <button type="submit" class="btn btn-danger btn-sm" style="border-radius: 0px 3px 3px 0px" title="Delete"
                                         onclick="return confirm('Are you sure you want to delete this animal?')">
-                                        <i class="fas fa-trash"></i>
+                                        <i class="bi bi-trash"></i>
                                     </button>
                                 </form>
                             </div>

@@ -30,8 +30,8 @@ Route::get('admin/users', [UserController::class, 'admins'])->name('admin.users.
 Route::get('buyer/users', [UserController::class, 'buyers'])->name('buyer.users.index')->middleware(['auth', 'verified']);
 Route::get('seller/users', [UserController::class, 'sellers'])->name('seller.users.index')->middleware(['auth', 'verified']);
 
-
-
+Route::post('/animals/{animal}/images', [AnimalController::class, 'uploadImages'])
+    ->name('animal.images.upload');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

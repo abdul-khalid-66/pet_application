@@ -40,33 +40,23 @@
                         <td>{{ $category->slug }}</td>
                         <td>{{ $category->animals_count }}</td>
                         <td>{{ $category->created_at->format('d M Y') }}</td>
-                        <td class="text-center">
-                            <div class="btn-group btn-group-sm" role="group" aria-label="User actions">
-
-                                {{-- View --}}
-                                {{-- <a href="{{ route('categories.show', $category->id) }}" class="btn btn-info"
-                                    data-toggle="tooltip" data-bs-toggle="tooltip" data-placement="top"
-                                    data-bs-placement="top" title="View">
+                        <td>
+                            <div class="btn-group">
+                                {{-- <a href="{{ route('categories.show', $category->id) }}" class="btn btn-info btn-sm"
+                                    title="View">
                                     <i class="bi bi-eye"></i>
                                 </a> --}}
-
-                                {{-- Edit --}}
-                                <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning"
-                                    data-toggle="tooltip" data-bs-toggle="tooltip" data-placement="top"
-                                    data-bs-placement="top" title="Edit">
+                                <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-primary btn-sm"
+                                    title="Edit">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-
-                                {{-- Delete --}}
                                 @if($category->id != Auth::id())
                                 <form action="{{ route('categories.destroy', $category->id) }}" method="POST"
-                                    onsubmit="return confirm('Are you sure you want to delete this user?')"
-                                    style="display:inline;">
+                                    style="display: inline-block;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger" data-toggle="tooltip"
-                                        data-bs-toggle="tooltip" data-placement="top" data-bs-placement="top"
-                                        title="Delete">
+                                    <button type="submit" class="btn btn-danger btn-sm" style="border-radius: 0px 3px 3px 0px" title="Delete"
+                                        onclick="return confirm('Are you sure you want to delete this Category?')">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </form>

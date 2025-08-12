@@ -309,7 +309,7 @@
                         @foreach($animal->images as $image)
                         <div class="image-wrapper">
                             <img src="{{ asset('storage/' . $image->image_path) }}" class="image-preview"
-                                alt="Animal Image">
+                                alt="Animal Image" style="width: 20%; height: 100px; object-fit: cover;">
                             <span class="remove-image" onclick="removeImage({{ $image->id }}, this)">
                                 ×
                             </span>
@@ -337,7 +337,7 @@
         </div>
         <!-- /.card-body -->
     </div>
-    @push('js')
+    @push('scripts')
         <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
         <script src="{{ asset('plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
         <script>

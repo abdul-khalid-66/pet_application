@@ -99,7 +99,7 @@
     }
   </style>
 
-  @stack('styles')
+  @stack('css')
 </head>
 
 <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
@@ -111,24 +111,6 @@
 
     <!-- Main Content Area -->
     <main class="app-main">
-      <!-- Content Header -->
-      {{-- <div class="app-content-header">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-sm-6">
-              @isset($title)
-                <h3 class="mb-0">{{ $title }}</h3>
-              @endisset
-            </div>
-            <div class="col-sm-6">
-              <ol class="breadcrumb float-sm-end">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active">Dashboard</li>
-              </ol>
-            </div>
-          </div>
-        </div>
-      </div> --}}
 
       <!-- Main Content -->
       <div class="app-content">

@@ -25,7 +25,24 @@ class AnimalController extends Controller
 
         return view('admin.animals.index', compact('animals'));
     }
+    public function uploadImages(Request $request, Animal $animal)
+    {
+        $request->validate([
+            'image' => 'required|image|max:2048', // 2MB max
+        ]);
 
+        $path = $request->file('image')->store('animal_images', 'public');
+
+        $image = $animal->images()->create([
+            'image_path' => $path
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'image_id' => $image->id,
+            'path' => asset('storage/' . $path)
+        ]);
+    }
     /**
      * Show the form for creating a new resource.
      */
