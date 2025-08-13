@@ -337,7 +337,6 @@
 <!-- Then load other dependencies -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input@2.1.0/dist/bs-custom-file-input.min.js"></script>
 
 <script>
 // Prevent Dropzone auto-discovery globally
@@ -386,22 +385,33 @@ $(document).ready(function() {
         }
 
         try {
-            const myDropzone = new Dropzone(dropzoneElement, {
+             const myDropzone = new Dropzone(dropzoneElement, {
                 url: uploadUrl,
                 paramName: "image",
                 maxFilesize: 2, // MB
                 maxFiles: 5,
-                acceptedFiles: "image/*",
+                acceptedFiles: "image/jpeg,image/png,image/jpg,image/gif", // Explicit MIME types
                 addRemoveLinks: true,
                 autoProcessQueue: false,
                 parallelUploads: 5,
-                uploadMultiple: true,
                 headers: {
-                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                    'Accept': 'application/json' // Ensure JSON responses
                 },
                 init: function() {
                     this.on("addedfile", function(file) {
-                        console.log('Added file:', file.name);
+                        console.log('Added file:', file.name, file.type);
+                        // Verify file type
+                        if (!file.type.match('image.*')) {
+                            this.removeFile(file);
+                            alert('Only image files are allowed');
+                        }
+                    });
+                    
+                    this.on("sending", function(file, xhr, formData) {
+                        console.log('Sending file:', file.name);
+                        // Add any additional data if needed
+                        formData.append('animal_id', {{ $animal->id }});
                     });
                     
                     this.on("success", function(file, response) {
@@ -415,25 +425,38 @@ $(document).ready(function() {
                     this.on("error", function(file, errorMessage) {
                         console.error("Upload error:", errorMessage);
                         let message = 'Upload failed';
-                        if (typeof errorMessage === 'string') {
-                            message = errorMessage;
-                        } else if (errorMessage.message) {
+                        if (errorMessage.message) {
                             message = errorMessage.message;
+                        } else if (errorMessage.xhr && errorMessage.xhr.response) {
+                            try {
+                                const response = JSON.parse(errorMessage.xhr.response);
+                                message = response.message || message;
+                            } catch (e) {}
                         }
-                        alert("Error: " + message);
+                        alert(message);
                     });
                 }
             });
-
-            // Form submission handler
             $('#animalForm').submit(function(e) {
                 e.preventDefault();
                 const form = this;
+                const dropzoneFiles = myDropzone.getQueuedFiles();
                 
-                if (myDropzone.getQueuedFiles().length > 0) {
+                if (dropzoneFiles.length > 0) {
+                    // Disable submit button during upload
+                    $(form).find('button[type="submit"]').prop('disabled', true);
+                    
                     myDropzone.on("queuecomplete", function() {
+                        console.log('All files uploaded, submitting form');
                         form.submit();
                     });
+                    
+                    myDropzone.on("error", function(file, errorMessage) {
+                        // Re-enable submit button on error
+                        $(form).find('button[type="submit"]').prop('disabled', false);
+                        console.error("Upload error:", errorMessage);
+                    });
+                    
                     myDropzone.processQueue();
                 } else {
                     form.submit();
@@ -463,10 +486,29 @@ $(document).ready(function() {
                 removedInput.val(removed.join(','));
                 $(element).closest('.image-wrapper').fadeOut(300, function() {
                     $(this).remove();
+                    deleteImageFromServer(imageId);
                 });
             }
         }
     };
+
+    function deleteImageFromServer(imageId) {
+        $.ajax({
+            url: `/animal-images/${imageId}`,
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                console.log('Image deleted successfully', response);
+            },
+            error: function(xhr) {
+                console.error('Error deleting image:', xhr.responseText);
+                // Optionally show error to user
+                alert('Error deleting image. Please try again.');
+            }
+        });
+    }
 });
 </script>
 @endpush

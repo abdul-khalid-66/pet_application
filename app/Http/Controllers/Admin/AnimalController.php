@@ -27,21 +27,49 @@ class AnimalController extends Controller
     }
     public function uploadImages(Request $request, Animal $animal)
     {
-        $request->validate([
-            'image' => 'required|image|max:2048', // 2MB max
-        ]);
+        try {
+            $validator = Validator::make($request->all(), [
+                'image' => [
+                    'required',
+                    'image',
+                    'mimes:jpeg,png,jpg,gif',
+                    'max:2048'
+                ],
+            ]);
 
-        $path = $request->file('image')->store('animal_images', 'public');
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->errors()->first(),
+                    'errors' => $validator->errors()
+                ], 422);
+            }
 
-        $image = $animal->images()->create([
-            'image_path' => $path
-        ]);
+            if (!$request->file('image')->isValid()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid image file'
+                ], 422);
+            }
 
-        return response()->json([
-            'success' => true,
-            'image_id' => $image->id,
-            'path' => asset('storage/' . $path)
-        ]);
+            $path = $request->file('image')->store('animals/images', 'public');
+
+            $image = $animal->images()->create([
+                'image_path' => $path,
+                'is_primary' => false,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'image_id' => $image->id,
+                'path' => asset('storage/' . $path)
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Server error: ' . $e->getMessage()
+            ], 500);
+        }
     }
     /**
      * Show the form for creating a new resource.
@@ -143,11 +171,29 @@ class AnimalController extends Controller
         return view('admin.animals.edit', compact('animal', 'categories', 'sellers'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    public function destroyImage(AnimalImage $image)
+    {
+        try {
+            // Delete file from storage
+            Storage::disk('public')->delete($image->image_path);
+
+            // Delete record from database
+            $image->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Image deleted successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting image: ' . $e->getMessage()
+            ], 500);
+        }
+    }
     public function update(Request $request, Animal $animal)
     {
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:animal_categories,id',
@@ -164,7 +210,6 @@ class AnimalController extends Controller
             'health_info' => 'nullable|string',
             'feed_details' => 'nullable|string',
             'status' => 'required|in:available,sold,not_for_sale,expired',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'is_featured' => 'nullable|boolean',
         ]);
 
@@ -225,16 +270,5 @@ class AnimalController extends Controller
 
         return redirect()->route('animals.index')
             ->with('success', 'Animal deleted successfully.');
-    }
-
-    /**
-     * Remove an individual image
-     */
-    public function destroyImage(AnimalImage $image)
-    {
-        Storage::disk('public')->delete($image->image_path);
-        $image->delete();
-
-        return response()->json(['success' => true]);
     }
 }

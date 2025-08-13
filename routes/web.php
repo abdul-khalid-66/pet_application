@@ -32,6 +32,8 @@ Route::get('seller/users', [UserController::class, 'sellers'])->name('seller.use
 
 Route::post('/animals/{animal}/images', [AnimalController::class, 'uploadImages'])
     ->name('animal.images.upload');
+Route::delete('/animal-images/{image}', [AnimalController::class, 'destroyImage'])
+    ->name('animal.images.destroy');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
