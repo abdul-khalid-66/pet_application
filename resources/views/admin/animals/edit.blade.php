@@ -303,7 +303,7 @@
                     <div class="image-preview-container mt-3" id="existingImages">
                         @foreach($animal->images as $image)
                         <div class="image-wrapper">
-                            <img src="{{ asset('storage/' . $image->image_path) }}" class="image-preview" alt="Animal Image">
+                            <img src="{{ asset('backend/' . $image->image_path) }}" class="image-preview" alt="Animal Image">
                             <span class="remove-image" onclick="removeImage({{ $image->id }}, this)">
                                 ×
                             </span>
@@ -332,9 +332,6 @@
     </div>
 
 @push('scripts')
-<!-- Load jQuery first -->
-{{-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> --}}
-<!-- Then load other dependencies -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
 
@@ -509,6 +506,7 @@ $(document).ready(function() {
             }
         });
     }
+    
 });
 </script>
 @endpush

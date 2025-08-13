@@ -35,7 +35,7 @@
                         <td>{{ $animal->id }}</td>
                         <td>
                             @if($animal->images->count() > 0)
-                            <img src="{{ asset('storage/' . $animal->images->first()->image_path) }}"
+                            <img src="{{ asset('backend/' . $animal->images->first()->image_path) }}"
                                 alt="{{ $animal->name }}" style="height: 50px; width: 80px" class="animal-img">
                             @else
                             <span class="text-muted">No image</span>

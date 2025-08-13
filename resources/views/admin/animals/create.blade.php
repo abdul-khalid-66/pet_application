@@ -1,7 +1,7 @@
 <x-app-layout>
     @push('css')
-    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/dropzone/min/dropzone.min.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" rel="stylesheet" type="text/css" />
     <style>
         .image-preview {
             width: 100px;
@@ -43,7 +43,7 @@
     @endpush
 
     <x-slot name="page_title">
-        {{ isset($animal) ? 'Edit Animal' : 'Add New Animal' }}
+        {{ isset($animal) ? 'Edit Animal' : 'Create New Animal' }}
     </x-slot>
     <x-slot name="page_button">
         <a href="{{ route('animals.index') }}" class="btn btn-secondary btn-sm">
@@ -52,15 +52,17 @@
     </x-slot>
 
     <div class="card">
-        <!-- /.card-header -->
         <div class="card-body">
-            <form action="{{ isset($animal) ? route('animals.update', $animal->id) : route('animals.store') }}"
-                method="POST" enctype="multipart/form-data">
+            <form action="{{ isset($animal) ? route('animals.update', $animal->id) : route('animals.store') }}" 
+                  method="POST" 
+                  enctype="multipart/form-data" 
+                  id="animalForm">
                 @csrf
-                @if(isset($animal))
-                @method('PUT')
-                @endif
+                @isset($animal)
+                    @method('PUT')
+                @endisset
 
+                <!-- Form fields remain the same, just update value sources -->
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -290,95 +292,165 @@
 
                 <div class="form-group">
                     <label for="images">Images</label>
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input @error('images') is-invalid @enderror" id="images"
-                            name="images[]" multiple>
-                        <label class="custom-file-label" for="images">Choose images</label>
-                        @error('images')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                        @enderror
-                    </div>
+                    <div class="dropzone" id="imageDropzone"></div>
                     <small class="form-text text-muted">
                         Upload multiple images (max 5 images, max 2MB each)
                     </small>
 
-                    @if(isset($animal) && $animal->images->count() > 0)
-                    <div class="image-preview-container mt-3">
+                    @isset($animal)
+                    <div class="image-preview-container mt-3" id="existingImages">
                         @foreach($animal->images as $image)
                         <div class="image-wrapper">
-                            <img src="{{ asset('storage/' . $image->image_path) }}" class="image-preview"
-                                alt="Animal Image" style="width: 20%; height: 100px; object-fit: cover;">
+                            <img src="{{ asset('backend/' . $image->image_path) }}" class="image-preview" alt="Animal Image">
                             <span class="remove-image" onclick="removeImage({{ $image->id }}, this)">
                                 ×
                             </span>
                         </div>
                         @endforeach
                     </div>
-                    @endif
-                </div>
-
-                <div class="form-group">
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="is_featured" name="is_featured"
-                            value="1" {{ old('is_featured', $animal->is_featured ?? false) ? 'checked' : '' }}>
-                        <label class="custom-control-label" for="is_featured">Featured Animal</label>
-                    </div>
+                    <input type="hidden" name="removed_images" id="removedImages" value="">
+                    @endisset
                 </div>
 
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">
-                        {{ isset($animal) ? 'Update Animal' : 'Add Animal' }}
+                        {{ isset($animal) ? 'Update Animal' : 'Create Animal' }}
                     </button>
                     <a href="{{ route('animals.index') }}" class="btn btn-default">Cancel</a>
                 </div>
             </form>
         </div>
-        <!-- /.card-body -->
     </div>
-    @push('scripts')
-        <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
-        <script src="{{ asset('plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
-        <script>
 
-            $(function () {
-                // Initialize Select2 Elements
-                $('.select2').select2();
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
 
-                // Initialize bsCustomFileInput
-                bsCustomFileInput.init();
+<script>
+Dropzone.autoDiscover = false;
 
-                // Calculate age based on date of birth
-                $('#date_of_birth').change(function() {
-                    if ($(this).val()) {
-                        const dob = new Date($(this).val());
-                        const today = new Date();
-                        let age = today.getFullYear() - dob.getFullYear();
-                        const m = today.getMonth() - dob.getMonth();
-                        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
-                            age--;
-                        }
-                        $('#age').val(age * 12); // Convert years to months
+$(document).ready(function() {
+    // Initialize Select2
+    $('.select2').select2({
+        width: '100%'
+    });
+
+    // Date calculation
+    $('#date_of_birth').change(function() {
+        if ($(this).val()) {
+            const dob = new Date($(this).val());
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear();
+            const m = today.getMonth() - dob.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+            $('#age').val(age * 12);
+        }
+    });
+
+    // Initialize Dropzone
+    const dropzoneElement = document.getElementById('imageDropzone');
+    if (dropzoneElement && !dropzoneElement.dropzone) {
+        let uploadUrl;
+        let animalId = {{ $animal->id ?? 'null' }};
+        
+        try {
+            uploadUrl = animalId 
+                ? "{{ isset($animal) ? route('animal.images.upload', $animal->id) : '' }}" 
+                : "/animals/temp/upload-images";
+        } catch (e) {
+            uploadUrl = animalId 
+                ? `/animals/${animalId}/upload-images` 
+                : '/animals/temp/upload-images';
+        }
+
+        const myDropzone = new Dropzone(dropzoneElement, {
+            url: uploadUrl,
+            paramName: "image",
+            maxFilesize: 2,
+            maxFiles: 5,
+            acceptedFiles: "image/jpeg,image/png,image/jpg,image/gif",
+            addRemoveLinks: true,
+            autoProcessQueue: false,
+            parallelUploads: 5,
+            headers: {
+                'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                'Accept': 'application/json'
+            },
+            init: function() {
+                this.on("addedfile", function(file) {
+                    if (!file.type.match('image.*')) {
+                        this.removeFile(file);
+                        alert('Only image files are allowed');
                     }
                 });
-            });
-            function removeImage(imageId, element) {
-                if (confirm('Are you sure you want to remove this image?')) {
+                
+                this.on("success", function(file, response) {
+                    file.serverId = response.image_id;
+                    file.previewElement.classList.add("dz-success");
+                });
+                
+                this.on("error", function(file, errorMessage) {
+                    let message = errorMessage.message || 
+                                 (errorMessage.xhr && errorMessage.xhr.responseText) || 
+                                 'Upload failed';
+                    alert(message);
+                });
+            }
+        });
+
+        // Form submission handler
+        $('#animalForm').submit(function(e) {
+            e.preventDefault();
+            const form = this;
+            const dropzoneFiles = myDropzone.getQueuedFiles();
+            
+            if (dropzoneFiles.length > 0) {
+                $('button[type="submit"]').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Processing...');
+                
+                myDropzone.on("queuecomplete", function() {
+                    form.submit();
+                });
+                
+                myDropzone.processQueue();
+            } else {
+                form.submit();
+            }
+        });
+    }
+
+    // Image removal function (only for edit)
+    @isset($animal)
+    window.removeImage = function(imageId, element) {
+        if (confirm('Are you sure you want to remove this image?')) {
+            const removedInput = $('#removedImages');
+            let removed = removedInput.val() ? removedInput.val().split(',') : [];
+            
+            if (!removed.includes(imageId.toString())) {
+                removed.push(imageId);
+                removedInput.val(removed.join(','));
+                
+                $(element).closest('.image-wrapper').fadeOut(300, function() {
+                    $(this).remove();
+                    
+                    // Optional: Immediate deletion
                     $.ajax({
-                        url: '/admin/animal-images/' + imageId,
-                        type: 'DELETE',
-                        data: {
-                            _token: '{{ csrf_token() }}'
+                        url: `/animal-images/${imageId}`,
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        success: function(response) {
-                            if (response.success) {
-                                $(element).parent().remove();
-                            }
+                        success: function() {
+                            console.log('Image deleted');
                         }
                     });
-                }
+                });
             }
-        </script>
-    @endpush
+        }
+    };
+    @endisset
+});
+</script>
+@endpush
 </x-app-layout>

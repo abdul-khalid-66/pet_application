@@ -34,6 +34,9 @@ Route::post('/animals/{animal}/images', [AnimalController::class, 'uploadImages'
     ->name('animal.images.upload');
 Route::delete('/animal-images/{image}', [AnimalController::class, 'destroyImage'])
     ->name('animal.images.destroy');
+Route::post('/animals/temp/upload-images', [AnimalController::class, 'uploadTempImages']);
+Route::delete('/animals/temp/delete-image/{image}', [AnimalController::class, 'deleteTempImage']);
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

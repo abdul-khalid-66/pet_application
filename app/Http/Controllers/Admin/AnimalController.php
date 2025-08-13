@@ -32,7 +32,7 @@ class AnimalController extends Controller
                 'image' => [
                     'required',
                     'image',
-                    'mimes:jpeg,png,jpg,gif',
+                    'mimes:jpeg,png,jpg,gif,webp',
                     'max:2048'
                 ],
             ]);
@@ -52,7 +52,7 @@ class AnimalController extends Controller
                 ], 422);
             }
 
-            $path = $request->file('image')->store('animals/images', 'public');
+            $path = Storage::disk('website')->putFile('animal_images', $request->file('image'));
 
             $image = $animal->images()->create([
                 'image_path' => $path,
@@ -62,7 +62,7 @@ class AnimalController extends Controller
             return response()->json([
                 'success' => true,
                 'image_id' => $image->id,
-                'path' => asset('storage/' . $path)
+                'path' => Storage::disk('website')->url($path) // Get full URL
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -132,18 +132,18 @@ class AnimalController extends Controller
             'is_featured' => $request->has('is_featured'),
         ]);
 
-        // Handle image uploads
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $path = $image->store('animals/images', 'public');
+        // Handle temp images
+        $tempImages = session('temp_animal_images', []);
+        foreach ($tempImages as $tempImage) {
+            $newPath = str_replace('temp/', '', $tempImage);
+            Storage::disk('website')->move($tempImage, $newPath);
 
-                AnimalImage::create([
-                    'animal_id' => $animal->id,
-                    'image_path' => $path,
-                    'is_primary' => false, // You can set the first image as primary if you want
-                ]);
-            }
+            $animal->images()->create([
+                'image_path' => $newPath,
+                'is_primary' => false
+            ]);
         }
+        session()->forget('temp_animal_images');
 
         return redirect()->route('animals.index')
             ->with('success', 'Animal created successfully.');
@@ -168,14 +168,16 @@ class AnimalController extends Controller
         $sellers = User::where('role', 'seller')->get();
         $animal->load('images');
 
-        return view('admin.animals.edit', compact('animal', 'categories', 'sellers'));
+        return view('admin.animals.create', compact('animal', 'categories', 'sellers'));
     }
 
     public function destroyImage(AnimalImage $image)
     {
         try {
             // Delete file from storage
-            Storage::disk('public')->delete($image->image_path);
+            if (Storage::disk('website')->exists($image->image_path)) {
+                Storage::disk('website')->delete($image->image_path);
+            }
 
             // Delete record from database
             $image->delete();
@@ -237,14 +239,24 @@ class AnimalController extends Controller
             'status' => $request->status,
             'is_featured' => $request->has('is_featured'),
         ]);
+        if ($request->filled('removed_images')) {
+            $removedIds = explode(',', $request->removed_images);
+            $imagesToDelete = $animal->images()->whereIn('id', $removedIds)->get();
+
+            foreach ($imagesToDelete as $image) {
+                if (Storage::disk('website')->exists($image->image_path)) {
+                    Storage::disk('website')->delete($image->image_path);
+                }
+                $image->delete();
+            }
+        }
 
         // Handle new image uploads
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
-                $path = $image->store('animals/images', 'public');
+                $path = Storage::disk('website')->putFile('animal_images', $image);
 
-                AnimalImage::create([
-                    'animal_id' => $animal->id,
+                $animal->images()->create([
                     'image_path' => $path,
                     'is_primary' => false,
                 ]);
@@ -270,5 +282,68 @@ class AnimalController extends Controller
 
         return redirect()->route('animals.index')
             ->with('success', 'Animal deleted successfully.');
+    }
+
+    public function uploadTempImages(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'image' => [
+                    'required',
+                    'image',
+                    'mimes:jpeg,png,jpg,gif',
+                    'max:2048'
+                ],
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->errors()->first()
+                ], 422);
+            }
+
+            $path = Storage::disk('website')->putFile('temp/animal_images', $request->file('image'));
+
+            // Store in session temporarily
+            $tempImages = session('temp_animal_images', []);
+            $tempImages[] = $path;
+            session(['temp_animal_images' => $tempImages]);
+
+            return response()->json([
+                'success' => true,
+                'path' => Storage::disk('website')->url($path),
+                'temp_path' => $path
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Server error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function deleteTempImage($image)
+    {
+        try {
+            $tempImages = session('temp_animal_images', []);
+
+            if (($key = array_search($image, $tempImages)) !== false) {
+                unset($tempImages[$key]);
+                session(['temp_animal_images' => $tempImages]);
+            }
+
+            Storage::disk('website')->delete($image);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Image deleted'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting image'
+            ], 500);
+        }
     }
 }
