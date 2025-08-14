@@ -1,25 +1,18 @@
 <x-app-layout>
     @push('css')
-    {{-- <style>
-            .category-img {
-                width: 60px;
-                height: 60px;
-                object-fit: cover;
-                border-radius: 5px;
-            }
-        </style> --}}
+
     @endpush
 
-    <x-slot name="page_title">All Sellers</x-slot>
+    <x-slot name="page_title">All Buyers</x-slot>
     <x-slot name="page_button">
-         <a href="{{ route('users.create') }}" class="btn btn-primary btn-sm">
+        <a href="{{ route('buyers.create') }}" class="btn btn-primary btn-sm">
             <i class="fas fa-plus"></i> Add New User
         </a>
     </x-slot>
     <div class="card">
         <!-- /.card-header -->
         <div class="card-body">
-            <table id="sellersTable" class="jquery_datatable_class table table-bordered table-striped table-hover">
+            <table id="buyersTable" class="jquery_datatable_class table table-bordered table-striped table-hover">
                 <thead>
                     <tr>
                         <th>ID</th>

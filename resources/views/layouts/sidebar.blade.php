@@ -131,16 +131,16 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('seller.users.index') }}" class="nav-link {{ 
-                                request()->routeIs('seller.users.*') ? 'active' : '' 
+                            <a href="{{ route('sellers.index') }}" class="nav-link {{ 
+                                request()->routeIs('sellers.*') ? 'active' : '' 
                             }}">
                                 <i class="nav-icon bi bi-person-badge"></i>
                                 <p>Sellers</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('buyer.users.index') }}" class="nav-link {{ 
-                                request()->routeIs('buyer.users.*') ? 'active' : '' 
+                            <a href="{{ route('buyers.index') }}" class="nav-link {{ 
+                                request()->routeIs('buyers.*') ? 'active' : '' 
                             }}">
                                 <i class="nav-icon bi bi-person-check"></i>
                                 <p>Buyers</p>

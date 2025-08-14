@@ -20,20 +20,6 @@ class UserController extends Controller
         ]);
     }
 
-    public function sellers()
-    {
-        return view('admin.users.sellers', [
-            'users' => User::whereNot('id', auth()->user()->id)->where('role', 'seller')->latest()->get(),
-        ]);
-    }
-
-    public function buyers()
-    {
-        return view('admin.users.buyers', [
-            'users' => User::whereNot('id', auth()->user()->id)->where('role', 'buyer')->latest()->get(),
-        ]);
-    }
-
     public function admins()
     {
         return view('admin.users.admins', [
