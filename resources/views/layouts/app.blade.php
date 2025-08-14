@@ -189,7 +189,7 @@
       }
     });
 
-    // Theme toggle functionality
+    // start of theme change
     document.getElementById('themeToggle').addEventListener('click', function () {
       const html = document.documentElement;
       const currentTheme = html.getAttribute('data-bs-theme');
@@ -197,18 +197,13 @@
       const lightIcon = document.getElementById('lightIcon');
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
+      // Update UI
       html.setAttribute('data-bs-theme', newTheme);
       
-      // Store theme preference in session
-      fetch('{{ route("theme.update") }}', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({theme: newTheme})
-      });
+      // Store in localStorage
+      localStorage.setItem('theme', newTheme);
       
+      // Update icons
       if (newTheme === 'dark') {
         lightIcon.classList.add('d-none');
         darkIcon.classList.remove('d-none');
@@ -218,6 +213,24 @@
       }
     });
 
+    // On page load
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      const html = document.documentElement;
+      const darkIcon = document.getElementById('darkIcon');
+      const lightIcon = document.getElementById('lightIcon');
+      
+      html.setAttribute('data-bs-theme', savedTheme);
+      
+      if (savedTheme === 'dark') {
+        lightIcon.classList.add('d-none');
+        darkIcon.classList.remove('d-none');
+      } else {
+        darkIcon.classList.add('d-none');
+        lightIcon.classList.remove('d-none');
+      }
+    });
+    // end of them chang
     // Check for saved theme preference on load
     document.addEventListener('DOMContentLoaded', function () {
       const html = document.documentElement;
