@@ -58,46 +58,64 @@
   <!-- Third Party Plugins -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+  <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
   <!-- Main CSS -->
   {{-- @vite(['resources/css/app.css', 'resources/css/adminlte.css']) --}}
     <link rel="stylesheet" href="{{ asset('admin/assets/css/adminlte.css') }}" />
 
-  <style>
-    [data-bs-theme="dark"] {
-      --bs-body-bg: #1a1a1a;
-      --bs-body-color: #f8f9fa;
-      --bs-secondary-bg: #2d2d2d;
-      --bs-tertiary-bg: #343a40;
-      --bs-border-color: #495057;
-    }
+<style>
+  /* Dark mode overrides for Select2 - Complete Solution */
+  [data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-selection {
+    background-color: transparent;
+    border-color: #495057;
+    color: #f8f9fa;
+  }
 
-    [data-bs-theme="dark"] .card {
-      background-color: var(--bs-secondary-bg);
-      border-color: var(--bs-border-color);
-    }
+  [data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-dropdown {
+    background-color: #2d2d2d;
+    border-color: #495057;
+  }
 
-    [data-bs-theme="dark"] .table {
-      --bs-table-bg: var(--bs-secondary-bg);
-      --bs-table-color: var(--bs-body-color);
-      --bs-table-striped-bg: rgba(255, 255, 255, 0.05);
-      --bs-table-hover-bg: rgba(255, 255, 255, 0.1);
-    }
+  [data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-search--dropdown .select2-search__field {
+    background-color: #343a40;
+    border-color: #495057;
+    color: #f8f9fa;
+  }
 
-    [data-bs-theme="dark"] .topbar {
-      background-color: var(--bs-secondary-bg);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-      border-bottom: 1px solid var(--bs-border-color);
-    }
+  /* Dropdown options */
+  [data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-results__option {
+    color: #f8f9fa;
+    background-color: #2d2d2d;
+  }
 
-    [data-bs-theme="dark"] .sidebar {
-      background: var(--bs-tertiary-bg);
-      color: var(--bs-body-color);
-    }
+  /* Selected option in dropdown */
+  [data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-results__option[aria-selected="true"] {
+    background-color: #343a40;
+    color: #141414 !important;
+  }
 
-    [data-bs-theme="dark"] .sidebar-menu .nav-link {
-      color: rgba(255, 255, 255, 0.8);
-    }
-  </style>
+  /* Placeholder text */
+  [data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-selection__placeholder {
+    color: #adb5bd;
+  }
+
+  /* Selected item in the input */
+  [data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-selection__rendered {
+    color: #f8f9fa !important;
+  }
+
+  /* For multiple select - selected items */
+  [data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__choice {
+    background-color: #343a40;
+    border-color: #495057;
+    color: #f8f9fa;
+  }
+
+  /* For multiple select - remove button */
+  [data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__choice__remove {
+    color: #adb5bd;
+  }
+</style>
 
   @stack('css')
 </head>
@@ -145,6 +163,8 @@
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <!-- Add this right after jQuery -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
   <script src="https://cdn.datatables.net/2.0.3/js/dataTables.bootstrap5.js"></script>
   <script src="{{ asset('admin/assets/js/adminlte.js') }}" defer></script>

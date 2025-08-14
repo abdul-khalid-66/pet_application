@@ -332,7 +332,8 @@ Dropzone.autoDiscover = false;
 $(document).ready(function() {
     // Initialize Select2
     $('.select2').select2({
-        width: '100%'
+        width: '100%',
+        theme: 'bootstrap-5'
     });
 
     // Date calculation
