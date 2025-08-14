@@ -81,5 +81,35 @@ class ProfileController extends Controller
         return redirect()->route('buyers.index')->with('success', 'Buyer created successfully.');
     }
 
-    // ... rest of the controller methods ...
+    /**
+     * Display the specified resource.
+     */
+    public function show(BuyerProfile $buyerProfile)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(BuyerProfile $buyerProfile)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, BuyerProfile $buyerProfile)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(BuyerProfile $buyerProfile)
+    {
+        //
+    }
 }
