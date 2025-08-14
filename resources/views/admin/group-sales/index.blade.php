@@ -8,7 +8,7 @@
 
     <div class="card">
         <div class="card-body">
-            <table id="groupSalesTable" class="table table-bordered table-striped table-hover">
+            <table id="groupSalesTable" class="jquery_datatable_class table table-bordered table-striped table-hover">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -31,20 +31,21 @@
                         <td>{{ $sale->created_at->format('d M Y') }}</td>
                         <td>
                             <div class="btn-group">
-                                <a href="{{ route('group-sales.show', $sale->id) }}" 
-                                   class="btn btn-info btn-sm" title="View">
-                                    <i class="fas fa-eye"></i>
+                                <a href="{{ route('group-sales.show', $sale->id) }}" class="btn btn-info btn-sm"
+                                    title="View">
+                                    <i class="bi bi-eye"></i>
                                 </a>
-                                <a href="{{ route('group-sales.edit', $sale->id) }}" 
-                                   class="btn btn-primary btn-sm" title="Edit">
-                                    <i class="fas fa-edit"></i>
+                                <a href="{{ route('group-sales.edit', $sale->id) }}" class="btn btn-primary btn-sm"
+                                    title="Edit">
+                                    <i class="bi bi-pencil"></i>
                                 </a>
-                                <form action="{{ route('group-sales.destroy', $sale->id) }}" method="POST">
+                                <form action="{{ route('group-sales.destroy', $sale->id) }}" method="POST"
+                                    style="display: inline-block;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" title="Delete"
+                                    <button type="submit" class="btn btn-danger btn-sm" style="border-radius: 0px 3px 3px 0px" title="Delete"
                                         onclick="return confirm('Are you sure? This will make all animals available again.')">
-                                        <i class="fas fa-trash"></i>
+                                        <i class="bi bi-trash"></i>
                                     </button>
                                 </form>
                             </div>

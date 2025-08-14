@@ -55,7 +55,7 @@
                             <td>{{ $animal->id }}</td>
                             <td>
                                 @if($animal->images->first())
-                                <img src="{{ asset('storage/' . $animal->images->first()->image_path) }}" 
+                                <img src="{{ asset('backend/' . $animal->images->first()->image_path) }}" 
                                      alt="{{ $animal->name }}" width="60" class="img-thumbnail">
                                 @else
                                 <span class="text-muted">No image</span>
