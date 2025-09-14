@@ -63,6 +63,7 @@ class ProfileController extends Controller
             'country' => $request->country,
         ]);
 
+        $user->assignRole('buyer');
         // Handle profile image
         if ($request->hasFile('profile_image')) {
             $profileImagePath = $request->file('profile_image')->store('profile_images', 'public');
