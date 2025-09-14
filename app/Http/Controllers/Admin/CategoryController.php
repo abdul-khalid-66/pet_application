@@ -21,7 +21,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('admin.categories.create');
+        $categories = AnimalCategory::orderBy('depth')->get();
+        return view('admin.categories.create', compact('categories'));
     }
 
     /**
@@ -32,9 +33,9 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:animal_categories',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'parent_id' => 'nullable|exists:animal_categories,id' // Add validation for parent_id
         ]);
-
 
         if ($request->hasFile('image')) {
             $validated['image'] = Storage::disk('website')->putFile('category_images', $request->file('image'));
@@ -42,6 +43,12 @@ class CategoryController extends Controller
 
 
         $validated['slug'] = Str::slug($validated['name']);
+
+        // Calculate depth if parent is selected
+        if (!empty($validated['parent_id'])) {
+            $parent = AnimalCategory::find($validated['parent_id']);
+            $validated['depth'] = $parent->depth + 1;
+        }
 
         AnimalCategory::create($validated);
 
