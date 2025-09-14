@@ -1095,21 +1095,34 @@
                             <a class="nav-link" href="#contact">Contact</a>
                         </li>
                     </ul>
-
-                    <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
-                        <button class="btn btn-outline-primary me-2" id="loginBtn">
-                            <i class="fas fa-sign-in-alt me-1"></i>Login
-                        </button>
-                        <button class="btn btn-primary" id="registerBtn">
-                            <i class="fas fa-user-plus me-1"></i>Register
-                        </button>
-
-                        <!-- Favorites Counter -->
-                        <div class="favorites-counter ms-2" id="favoritesCounter">
-                            <i class="fas fa-heart"></i>
-                            <span class="badge bg-danger" id="favCount">0</span>
+                    @if (Route::has('login'))
+                        <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
+                            @auth
+                                <a
+                                    href="{{ url('/dashboard') }}"
+                                    class="btn btn-outline-primary me-2" id="dashboardBtn">
+                                    <i class="fas fa-sign-in-alt me-1"></i>Dashboard
+                                </a>
+                            @else
+                                <a
+                                    href="{{ route('login') }}"
+                                    class="btn btn-outline-primary me-2" id="loginBtn">
+                                    <i class="fas fa-sign-in-alt me-1"></i>Log in
+                                </a>
+                                @if (Route::has('register'))
+                                    <a
+                                        href="{{ route('register') }}"
+                                        class="btn btn-primary" id="registerBtn">
+                                        <i class="fas fa-user-plus me-1"></i>Register
+                                    </a>
+                                @endif
+                                <div class="favorites-counter ms-2" id="favoritesCounter">
+                                    <i class="fas fa-heart"></i>
+                                    <span class="badge bg-danger" id="favCount">0</span>
+                                </div>
+                            @endauth
                         </div>
-                    </div>
+                    @endif
                 </div>
             </div>
         </div>
